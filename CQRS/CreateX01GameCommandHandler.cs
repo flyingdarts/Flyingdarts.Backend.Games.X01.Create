@@ -41,5 +41,4 @@ public class CreateX01GameCommandHandler : IRequestHandler<CreateX01GameCommand,
             })
         };
     }
-
 }
