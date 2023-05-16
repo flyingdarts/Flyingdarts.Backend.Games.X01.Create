@@ -3,6 +3,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
+using Flyingdarts.Lambdas.Shared;
 using Flyingdarts.Persistence;
 using Flyingdarts.Shared;
 using MediatR;
@@ -22,7 +23,7 @@ public class CreateX01GameCommandHandler : IRequestHandler<CreateX01GameCommand,
     {
         var game = Game.Create(2, X01GameSettings.Create(1, 3), request.RoomId);
         var gamePlayer = GamePlayer.Create(game.GameId, request.UserId);
-        
+
         var gameWrite = _dbContext.CreateBatchWrite<Game>(_applicationOptions.Value.ToOperationConfig());
         gameWrite.AddPutItem(game);
 
@@ -34,7 +35,11 @@ public class CreateX01GameCommandHandler : IRequestHandler<CreateX01GameCommand,
         return new APIGatewayProxyResponse
         {
             StatusCode = 200,
-            Body = JsonSerializer.Serialize(new { Game = game, Players = new[]{ gamePlayer }})
+            Body = JsonSerializer.Serialize(new SocketMessage<CreateX01GameCommand>
+            {
+                Message = request
+            })
         };
     }
+
 }
