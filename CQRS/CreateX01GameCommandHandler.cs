@@ -1,7 +1,6 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
 using System.Threading;
 using System.Threading.Tasks;
-using Flyingdarts.Persistence;
 using MediatR;
 
 public class CreateX01GameCommandHandler : IRequestHandler<CreateX01GameCommand, APIGatewayProxyResponse>
